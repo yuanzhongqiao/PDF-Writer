@@ -1,121 +1,125 @@
-Welcome to PDF-Writer, Also known as [PDFHummus](http://www.pdfhummus.com).   
-PDFHummus is a Fast and Free C++ Library for Creating, Parsing an Manipulating PDF Files and Streams. 
-
-Documentation is available [here](https://github.com/galkahana/PDF-Writer/wiki).
-Project site is [here](http://www.pdfhummus.com). 
-
-There is also a NodeJS module named [MuhammaraJS](https://github.com/julianhille/MuhammaraJS) wrapping PDFHummus PDF library and making it available for that language. It is the current and still supported version of a now deprecated [HummusJS](https://github.com/galkahana/HummusJS) project of mine, which [julianhille](https://github.com/julianhille) maintains.
-
-# First time around
-
-This is a C++ Project using CMake as project builder.
-To build/develop You will need:
-
-1. a compiler. for win you can use vs studio. choose community version - https://visualstudio.microsoft.com/
-2. cmake - download from here - https://cmake.org/
-
-Given that this is a Library and _not_ an executable, you can ignore this cmake setup and just use the code as is by copying the folders into your own project. There are, however, better ways to include the code in your own project. The project cmake setup defines PDFHummus as a package and allows you to import the project directly from this repo (remotely) or by pre-installing the package. The instructions below contains information about building the project locally, testing and installing it, as well as explaining how to use CMake `FetchContent` functionality in order to import the project automatically from this repo
-
-For documentation about how to use the library API you should head for the Wiki pages [here](https://github.com/galkahana/PDF-Writer/wiki).
-
-# Short tour of the project
-
-There are 8 folders to this project:
-- **FreeType, LibAesgm, LibJpeg, LibPng, LibTiff, Zlib**: 6 libraries that are dependencies to PDFWriter. They are bundled here for convenience. You don't have to use them to compile PDFWriter, but rather use what versions you have installed on your setup.
-- **PDFWriter**: main folder, includes the library implementation
-- **PDFWriterTesting**: test folder, includes test source code that's used with cmake testing application - ctest.
-
-# Building, Installing and testing the project with CMake
-
-Once you installed pre-reqs, you can now build the project.
-
-## Create the project files
-
-To build you project start by creating a project file in a "build" folder off of the cmake configuration, like this:
-
-```bash
-mkdir build
+<div class="Box-sc-g0xbh4-0 bJMeLZ js-snippet-clipboard-copy-unpositioned" data-hpc="true"><article class="markdown-body entry-content container-lg" itemprop="text"><p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">欢迎使用 PDF-Writer，也称为</font></font><a href="http://www.pdfhummus.com" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font><br><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+PDFHummus 是一个快速且免费的 C++ 库，用于创建、解析操作 PDF 文件和流。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文档可</font></font><a href="https://github.com/galkahana/PDF-Writer/wiki"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在此处</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获取。</font><font style="vertical-align: inherit;">项目地点在</font></font><a href="http://www.pdfhummus.com" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这里</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">还有一个名为</font></font><a href="https://github.com/julianhille/MuhammaraJS"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MuhammaraJS</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">的 NodeJS 模块包装 PDFHummus PDF 库并使其可用于该语言。</font><font style="vertical-align: inherit;">它是我的</font></font><a href="https://github.com/galkahana/HummusJS"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">HummusJS</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">项目的当前且仍受支持的版本，该项目现已弃用，由</font></font><a href="https://github.com/julianhille"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">julianhille</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">维护。</font></font></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第一次</font></font></h1><a id="user-content-first-time-around" class="anchor-element" aria-label="永久链接：第一次" href="#first-time-around"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这是一个使用 CMake 作为项目构建器的 C++ 项目。</font><font style="vertical-align: inherit;">要构建/开发您将需要：</font></font></p>
+<ol dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">一个编译器。</font><font style="vertical-align: inherit;">对于win，您可以使用vs studio。</font><font style="vertical-align: inherit;">选择社区版本 - </font></font><a href="https://visualstudio.microsoft.com/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">https://visualstudio.microsoft.com/</font></font></a></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cmake - 从这里下载 - </font></font><a href="https://cmake.org/" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">https://cmake.org/</font></font></a></li>
+</ol>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">鉴于这是一个库而</font></font><em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不是</font></font></em><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">可执行文件，您可以忽略此 cmake 设置，只需将文件夹复制到您自己的项目中即可按原样使用代码。</font><font style="vertical-align: inherit;">然而，有更好的方法可以将代码包含在您自己的项目中。</font><font style="vertical-align: inherit;">项目 cmake 设置将 PDFHummus 定义为包，并允许您直接从此存储库（远程）或通过预安装包导入项目。</font><font style="vertical-align: inherit;">下面的说明包含有关在本地构建项目、测试和安装项目的信息，以及解释如何使用 CMake</font></font><code>FetchContent</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">功能以便从该存储库自动导入项目</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">有关如何使用库 API 的文档，您应该前往</font></font><a href="https://github.com/galkahana/PDF-Writer/wiki"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">此处的</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Wiki 页面。</font></font></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">项目简短参观</font></font></h1><a id="user-content-short-tour-of-the-project" class="anchor-element" aria-label="永久链接：该项目的简短介绍" href="#short-tour-of-the-project"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该项目有 8 个文件夹：</font></font></p>
+<ul dir="auto">
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">FreeType、LibAesgm、LibJpeg、LibPng、LibTiff、Zlib</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：6 个依赖于 PDFWriter 的库。</font><font style="vertical-align: inherit;">为了方便起见，它们被捆绑在这里。</font><font style="vertical-align: inherit;">您不必使用它们来编译 PDFWriter，而是使用您在设置中安装的版本。</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFWriter</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：主文件夹，包含库实现</font></font></li>
+<li><strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFWriterTesting</font></font></strong><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">：测试文件夹，包含与 cmake 测试应用程序 - ctest 一起使用的测试源代码。</font></font></li>
+</ul>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">使用 CMake 构建、安装和测试项目</font></font></h1><a id="user-content-building-installing-and-testing-the-project-with-cmake" class="anchor-element" aria-label="永久链接：使用 CMake 构建、安装和测试项目" href="#building-installing-and-testing-the-project-with-cmake"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装先决条件后，您现在可以构建项目。</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">创建项目文件</font></font></h2><a id="user-content-create-the-project-files" class="anchor-element" aria-label="永久链接：创建项目文件" href="#create-the-project-files"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要构建项目，首先在 cmake 配置的“build”文件夹中创建一个项目文件，如下所示：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>mkdir build
+<span class="pl-c1">cd</span> build
+cmake ..</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="mkdir build
 cd build
-cmake ..
-```
-
-### options for generating Cmake project files
-
-The project defines some optional flags to allow you to control some aspects of building PDFHummus.
-
-- `PDFHUMMUS_NO_DCT` - defines whether to exclude DCT functionality (essentially - not include LibJpeg) from the library. defaults to `FALSE`. when setting `TRUE` the library will not require the existance of LibJpeg however will not be able to decode DCT streams from PDF files. (note that this has no baring on the ability to include JPEG images. That ability does not require LibJpeg given the innate ability of PDF files to include DCT encoded streams).
-- `PDFHUMMUS_NO_TIFF` - defines whether to exclude TIFF functionality (essentially - not include LibTiff) from the library. defaults to `FALSE`. when setting `TRUE` the library will not require the existance of LibTiff however will not be able to embed TIFF images.
-- `PDFHuMMUS_NO_PNG` -  defines whether to exclude PNG functionality (essentially - not include LibPng) from the library. defaults to `FALSE`. when setting `TRUE` the library will not require the existance of LibPng however will not be able to embed PNG images.
-- `USE_BUNDLED` - defines whether to use bundled dependencies when building the project or use system libraries. defaults to `TRUE`. when defined as `FALSE`, the project configuration will look for installed versions of	LibJpeg, Zlib, LibTiff, FreeType, LibAesgm, LibPng and use them instead of the bundled ones (i.e. those contained in the project). Note that for optional dependencies - LibJpeg, LibTiff, LibPng - if not installed the coniguration will succeed but will automatically set the optional building flags (the 3 just described) according to the libraries avialability. As for required dependencies - FreeType, LibAesgm, Zlib - the configuration will fail if those dependencies are not found. see `USE_UNBUNDLED_FALLBACK_BUNDLED` for an alternative method to deal with dependencies not being found.
-- `USE_UNBUNDLED_FALLBACK_BUNDLED` - Defines an alternative behavior when using `USE_BUNDLED=OFF` and a certain dependency is not installed on the system. If set to `TRUE` then for a dependency that's not found it will fallback on the bundled version of this dependency. This is essentially attempting to find installed library and if not avialable use a bundled one to ensure that the build will succeed.
-
-You can set any of those options when calling the `cmake` command. For example to use system libraries replaced the earlier sequence with:
-
-```bash
-cd build
-cmake .. -DUSE_BUNDLED=FALSE
-```
-
-## Build
-
-Once you got the project file, you can now build the project. If you created an IDE file, you can use the IDE file to build the project.
-Alternatively you can do so from the command line, again using cmake. 
-
-The following builds the project from its root folder:
-```bash
-cmake --build build [--config release]
-```
-
-This will build the project inside the build folder. what's in brackets is optional and will specify a release onfiguration build. You will be able to look up the result library files per how you normally do when building with the relevant build environment. For example, for windows, the `build/PDFWriter/Release` folder will have the result PDFWriter file.
-
-## Testing
-
-This project uses `ctest` for running tests. `ctest` is part of cmake and should be installed as part of cmake installation.
-The tests run various checks on PDFHummus...and I admit quite a lot of them are not great as unitests as they may just create PDF files without verifying they are good...one uses ones eyes to inspect the test files to do that...or revert to being OK with no exceptions being thrown, which is also good. They are decent as sample code to learn how to do things though 😬.
-
-To run the project tests (after having created the project files in ./build) go:
-
-```bash
-ctest --test-dir build [-C release]
-```
-
-This should scan the folders for tests and run them.
-Consider appending ` -j22` to the command in order to run tests in parallel to speed things up.
-
-
-You should be able to see result output files from the tests under `./build/Testing/Output`.
-
-
-Note that `ctest` does NOT build the project. It may fail if there's no previous build, or will not pick up on your changes if you made them
-since the last build. For This purpose there's an extra target created in the project to make sure the project and test code is built (as well as recreating the output folder to clear previous runs output):
-
-```bash
-cmake --build build --target pdfWriterCheck [--config release]
-```
-
-## Installing
-
-If you want, you can use the `install` verb of cmake to install a built product (the library files and includes). Use the prefix param to specify where you want the result to be installed to
-
-```bash
-cmake --install build --prefix ./etc/install [--config release]
-```
-
-This will install all the library files in `./etc/install`. You should see an "include" folder and a "lib" folder with include files and library files respectively.
-
-# Using PDFHummus in your own project
-
-If you want to use PDFHummus there are several methods:
-- copying the sources to your project
-- installing the project and including the result in your project
-- using PDFHummus package in your cmake project
-
-Not much to say about the first option. 2nd option just means to follow the installation instructions and then pointing to the resultant lib and include folders to build your project.
-
-3rd option is probably the best, especially if you already have cmake in your project. This project has package definition for `PDFHummus` package, which means you can have cmake look for this package and include it in your project with `find_package`. Then link to the `PDFHummus::PDFWriter` target and you are done. Another option is to do this + allow for fetching the project content from the repo with `FetchContent`. Here's an example from the [PDF TextExtraction project](https://github.com/galkahana/pdf-text-extraction/blob/master/TextExtraction/CMakeLists.txt) of mine:
-
-```cmake
-include(FetchContent)
+cmake .." tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">生成 Cmake 项目文件的选项</font></font></h3><a id="user-content-options-for-generating-cmake-project-files" class="anchor-element" aria-label="永久链接：生成 Cmake 项目文件的选项" href="#options-for-generating-cmake-project-files"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该项目定义了一些可选标志，以允许您控制构建 PDFHummus 的某些方面。</font></font></p>
+<ul dir="auto">
+<li><code>PDFHUMMUS_NO_DCT</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 定义是否从库中排除 DCT 功能（本质上 - 不包括 LibJpeg）。</font><font style="vertical-align: inherit;">默认为</font></font><code>FALSE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. </font><font style="vertical-align: inherit;">设置</font></font><code>TRUE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">库时不需要 LibJpeg 的存在，但无法从 PDF 文件解码 DCT 流。</font><font style="vertical-align: inherit;">（请注意，这并不妨碍包含 JPEG 图像的能力。考虑到 PDF 文件具有包含 DCT 编码流的固有能力，该能力不需要 LibJpeg）。</font></font></li>
+<li><code>PDFHUMMUS_NO_TIFF</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 定义是否从库中排除 TIFF 功能（本质上 - 不包括 LibTiff）。</font><font style="vertical-align: inherit;">默认为</font></font><code>FALSE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. </font><font style="vertical-align: inherit;">设置</font></font><code>TRUE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">库时不需要 LibTiff 的存在，但无法嵌入 TIFF 图像。</font></font></li>
+<li><code>PDFHuMMUS_NO_PNG</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 定义是否从库中排除 PNG 功能（本质上 - 不包括 LibPng）。</font><font style="vertical-align: inherit;">默认为</font></font><code>FALSE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. </font><font style="vertical-align: inherit;">设置</font></font><code>TRUE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">库时不需要 LibPng 的存在，但无法嵌入 PNG 图像。</font></font></li>
+<li><code>USE_BUNDLED</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 定义在构建项目时是否使用捆绑依赖项或使用系统库。</font><font style="vertical-align: inherit;">默认为</font></font><code>TRUE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. </font><font style="vertical-align: inherit;">当定义为 时</font></font><code>FALSE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">，项目配置将查找 LibJpeg、Zlib、LibTiff、FreeType、LibAesgm、LibPng 的已安装版本，并使用它们而不是捆绑版本（即项目中包含的版本）。</font><font style="vertical-align: inherit;">请注意，对于可选依赖项 - LibJpeg、LibTiff、LibPng - 如果未安装，配置将成功，但会根据库的可用性自动设置可选构建标志（刚刚描述的 3 个）。</font><font style="vertical-align: inherit;">至于所需的依赖项 - FreeType、LibAesgm、Zlib - 如果找不到这些依赖项，配置将失败。</font><font style="vertical-align: inherit;">请</font></font><code>USE_UNBUNDLED_FALLBACK_BUNDLED</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">参阅另一种方法来处理未找到的依赖项。</font></font></li>
+<li><code>USE_UNBUNDLED_FALLBACK_BUNDLED</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">- 定义使用时的替代行为</font></font><code>USE_BUNDLED=OFF</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">并且系统上未安装特定依赖项。</font><font style="vertical-align: inherit;">如果设置为</font></font><code>TRUE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">then 对于未找到的依赖项，它将回退到该依赖项的捆绑版本。</font><font style="vertical-align: inherit;">这本质上是试图找到已安装的库，如果不可用，则使用捆绑的库来确保构建成功。</font></font></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以在调用命令时设置任何这些选项</font></font><code>cmake</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">例如，要使用系统库，请将先前的序列替换为：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">cd</span> build
+cmake .. -DUSE_BUNDLED=FALSE</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd build
+cmake .. -DUSE_BUNDLED=FALSE" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">建造</font></font></h2><a id="user-content-build" class="anchor-element" aria-label="永久链接：构建" href="#build"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">获得项目文件后，您现在可以构建项目。</font><font style="vertical-align: inherit;">如果您创建了 IDE 文件，则可以使用 IDE 文件来构建项目。</font><font style="vertical-align: inherit;">或者，您可以再次使用 cmake 从命令行执行此操作。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以下从根文件夹构建项目：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>cmake --build build [--config release]</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cmake --build build [--config release]" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这将在构建文件夹中构建项目。</font><font style="vertical-align: inherit;">括号中的内容是可选的，并将指定发布配置构建。</font><font style="vertical-align: inherit;">您将能够按照使用相关构建环境进行构建时通常的方式查找结果库文件。</font><font style="vertical-align: inherit;">例如，对于 Windows，该</font></font><code>build/PDFWriter/Release</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">文件夹将包含结果 PDFWriter 文件。</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">测试</font></font></h2><a id="user-content-testing" class="anchor-element" aria-label="永久链接：测试" href="#testing"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该项目用于</font></font><code>ctest</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">运行测试。</font></font><code>ctest</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">是 cmake 的一部分，应作为 cmake 安装的一部分进行安装。</font><font style="vertical-align: inherit;">这些测试对 PDFHummus 进行各种检查...我承认其中很多测试都不是很好，因为它们可能只是创建 PDF 文件而不验证它们是否良好...人们用眼睛检查测试文件来做到这一点...或者恢复到正常状态，没有抛出任何异常，这也很好。</font><font style="vertical-align: inherit;">不过，它们作为示例代码很不错，可以帮助您学习如何做事 😬。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">要运行项目测试（在 ./build 中创建项目文件后），请执行以下操作：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>ctest --test-dir build [-C release]</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="ctest --test-dir build [-C release]" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这应该扫描文件夹中的测试并运行它们。</font><font style="vertical-align: inherit;">考虑附加</font></font><code> -j22</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">到命令以便并行运行测试以加快速度。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您应该能够看到 下测试的结果输出文件</font></font><code>./build/Testing/Output</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请注意，这</font></font><code>ctest</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">不会构建项目。</font><font style="vertical-align: inherit;">如果没有以前的构建，它可能会失败，或者如果您自上次构建以来进行了更改，则它不会接受您的更改。</font><font style="vertical-align: inherit;">为此，在项目中创建了一个额外的目标，以确保构建项目和测试代码（以及重新创建输出文件夹以清除以前的运行输出）：</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>cmake --build build --target pdfWriterCheck [--config release]</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cmake --build build --target pdfWriterCheck [--config release]" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装中</font></font></h2><a id="user-content-installing" class="anchor-element" aria-label="永久链接：安装" href="#installing"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果需要，您可以使用</font></font><code>install</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cmake 动词来安装构建的产品（库文件和包含文件）。</font><font style="vertical-align: inherit;">使用前缀参数指定要将结果安装到的位置</font></font></p>
+<div class="highlight highlight-source-shell notranslate position-relative overflow-auto" dir="auto"><pre>cmake --install build --prefix ./etc/install [--config release]</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cmake --install build --prefix ./etc/install [--config release]" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这将安装</font></font><code>./etc/install</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. </font><font style="vertical-align: inherit;">您应该看到一个“include”文件夹和一个“lib”文件夹，分别包含包含文件和库文件。</font></font></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在您自己的项目中使用 PDFHummus</font></font></h1><a id="user-content-using-pdfhummus-in-your-own-project" class="anchor-element" aria-label="永久链接：在您自己的项目中使用 PDFHummus" href="#using-pdfhummus-in-your-own-project"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果你想使用 PDFHummus 有几种方法：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">将源复制到您的项目</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装项目并将结果包含在您的项目中</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在您的 cmake 项目中使用 PDFHummus 包</font></font></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">对于第一个选项就不多说了。</font><font style="vertical-align: inherit;">第二个选项仅意味着按照安装说明进行操作，然后指向生成的库并包含文件夹来构建项目。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">第三个选项可能是最好的，特别是如果您的项目中已经有 cmake 的话。</font><font style="vertical-align: inherit;">该项目具有</font></font><code>PDFHummus</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">包的包定义，这意味着您可以让 cmake 查找该包并将其包含在您的项目中</font></font><code>find_package</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">。</font><font style="vertical-align: inherit;">然后链接到</font></font><code>PDFHummus::PDFWriter</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">目标就完成了。</font><font style="vertical-align: inherit;">另一种选择是执行此操作+允许使用</font></font><code>FetchContent</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">. </font><font style="vertical-align: inherit;">这是我的</font></font><a href="https://github.com/galkahana/pdf-text-extraction/blob/master/TextExtraction/CMakeLists.txt"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDF TextExtraction 项目</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">中的一个示例：</font></font></p>
+<div class="highlight highlight-source-cmake notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">include</span>(FetchContent)
 
 FetchContent_Declare(
   PDFHummus
@@ -125,17 +129,40 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(PDFHummus)
 
-target_link_libraries (TextExtraction PDFHummus::PDFWriter)
-```
+<span class="pl-c1">target_link_libraries</span> (TextExtraction PDFHummus::PDFWriter)</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="include(FetchContent)
 
-This will either download the project and build it or use an installed version (provided that one exists and has a matching version). 
-Change the `GIT_TAG` value to what version you'd like to install. You can use tags, branches, commit hashs. anything goes.
-Includes are included haha.
+FetchContent_Declare(
+  PDFHummus
+  GIT_REPOSITORY https://github.com/galkahana/PDF-Writer.git
+  GIT_TAG        v4.6.2
+  FIND_PACKAGE_ARGS
+)
+FetchContent_MakeAvailable(PDFHummus)
 
-You may consider an alternative form that uses URL instead of GIT_REPOSITORY, like this:
+target_link_libraries (TextExtraction PDFHummus::PDFWriter)" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这将下载项目并构建它或使用已安装的版本（前提是存在且具有匹配的版本）。</font><font style="vertical-align: inherit;">将值更改</font></font><code>GIT_TAG</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为您要安装的版本。</font><font style="vertical-align: inherit;">您可以使用标签、分支、提交哈希。</font><font style="vertical-align: inherit;">什么都可以。</font><font style="vertical-align: inherit;">包含在内哈哈。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">您可以考虑使用 URL 而不是 GIT_REPOSITORY 的替代形式，如下所示：</font></font></p>
+<div class="highlight highlight-source-cmake notranslate position-relative overflow-auto" dir="auto"><pre><span class="pl-c1">include</span>(FetchContent)
 
-```cmake
-include(FetchContent)
+FetchContent_Declare(
+  PDFHummus
+  URL https://github.com/galkahana/PDF-Writer/archive/refs/tags/v4.6.2.tar.gz
+  URL_HASH <span class="pl-k">SHA256</span>=0a36815ccc9d207028567f90039785c824b211169ba5da68de84d0c15455ab62
+  DOWNLOAD_EXTRACT_TIMESTAMP <span class="pl-c1">FALSE</span>
+  FIND_PACKAGE_ARGS
+)
+
+FetchContent_MakeAvailable(PDFHummus)</pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="include(FetchContent)
 
 FetchContent_Declare(
   PDFHummus
@@ -145,60 +172,69 @@ FetchContent_Declare(
   FIND_PACKAGE_ARGS
 )
 
-FetchContent_MakeAvailable(PDFHummus)
-```
-
-This has the benefit of fetching the archive URL rather than cmake runnig `git clone` on the specified target.
-PDFWriter archives since version v4.6.2 do not include PDFWriterTesting folder and its materials, making it a singificantly smaller download.
-You can find the archive urls in the Releases area for this repository.
-
-
-Note that when installing PDFHummus with the bundled libraries built (this is the default behvaior which can be changed by setting `USE_BUNDLED` variable to `FALSE`) there are additional targets that PDFHummus includes:
-- PDFHummus::FreeType - bundled freetype library
-- PDFHummus::LibAesgm - bundled aesgm library
-- PDFHummus::LibJpeg - bundled libjpeg library
-- PDFHummus::LibPng - bundled libpng library
-- PDFHummus::LibTiff - bundled libtiff library
-- PDFHummus:::Zlib - bundled zlib library
-
-You can use those targets in additon or instead of using PDFWriter if this makes sense to your project (like if you are extracting images, having LibJpeg or LibPng around can be useful).
-
-# Packaging PDFHummus for installing someplace else
-
-The project contains definitions for `cpack`, cmake packaging mechanism. It might be useful for when you want to build PDFHummus and then install it someplace else.
-
-The following will create a zip file with all libs and includes:
-```
-cd build
+FetchContent_MakeAvailable(PDFHummus)" tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这样做的好处是可以获取存档 URL，而不是</font></font><code>git clone</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">在指定目标上运行 cmake。</font><font style="vertical-align: inherit;">自 v4.6.2 版本起，PDFWriter 档案不包含 PDFWriterTesting 文件夹及其材料，因此下载量明显减小。</font><font style="vertical-align: inherit;">您可以在该存储库的“发布”区域中找到存档 URL。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">请注意，在使用内置的捆绑库安装 PDFHummus 时（这是默认行为，可以通过将</font></font><code>USE_BUNDLED</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">变量设置为 来更改</font></font><code>FALSE</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">），PDFHummus 还包含其他目标：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus::FreeType - 捆绑的 freetype 库</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus::LibAesgm - 捆绑 aesgm 库</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus::LibJpeg - 捆绑 libjpeg 库</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus::LibPng - 捆绑 libpng 库</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus::LibTiff - 捆绑的 libtiff 库</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PDFHummus:::Zlib - 捆绑的 zlib 库</font></font></li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果这对您的项目有意义（例如，如果您正在提取图像，那么使用 LibJpeg 或 LibPng 可能会很有用），您可以另外使用这些目标，或者代替使用 PDFWriter。</font></font></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">打包 PDFHummus 以安装在其他地方</font></font></h1><a id="user-content-packaging-pdfhummus-for-installing-someplace-else" class="anchor-element" aria-label="永久链接：打包 PDFHummus 以安装在其他地方" href="#packaging-pdfhummus-for-installing-someplace-else"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该项目包含</font></font><code>cpack</code><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">cmake 打包机制的定义。</font><font style="vertical-align: inherit;">当您想要构建 PDFHummus 然后将其安装在其他地方时，它可能很有用。</font></font></p>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">以下将创建一个包含所有库的 zip 文件并包括：</font></font></p>
+<div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>cd build
 cpack .
-```
-
-# VSCode usage
-
-If you are developing this project using vscode here's some suggestions to help you:  
-- install vscode C++ extensions:
-    - C/C++
-    - C/C++ Extension Pack
-    - C/C++ Themes
-- install vscode cmake extensions:
-    - Cmake
-    - Cmake Tools
-    - CMake Test Explorder
-
-This should help you enable testing and debugging the tests in vscode.
-
-
-# More building instructions for when you cant use cmake
-
-
-## iOS
-
-I wrote a post about how to compile and use the library for the iPhone and iPad environments. you can read it [here](http://pdfhummus.com/post/45501609236/how-to-build-iphone-apps-that-use-pdfhummus).
- 
-
-## Build insturctions for other scenraios
-
-It should be quite simple to construct project files in the various building environments (say VS and Xcode) if you want them. Here are some pointers:
-- All the PDFWriter sources are in PDFWriter folder (you can get it by downloading the git project or from the Downloads section).
-- The library is dependent on the dlls/shared libraries of Zlib, LibTiff, LibJpeg, LibPng and FreeType. When linking - make sure they are available.
-- The library should support well both 32 bit and 64 bit environments. It's using standard C++ libraries.
+</code></pre><div class="zeroclipboard-container">
+    <clipboard-copy aria-label="Copy" class="ClipboardButton btn btn-invisible js-clipboard-copy m-2 p-0 tooltipped-no-delay d-flex flex-justify-center flex-items-center" data-copy-feedback="Copied!" data-tooltip-direction="w" value="cd build
+cpack ." tabindex="0" role="button">
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-copy js-clipboard-copy-icon">
+    <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+</svg>
+      <svg aria-hidden="true" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-check js-clipboard-check-icon color-fg-success d-none">
+    <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+</svg>
+    </clipboard-copy>
+  </div></div>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">VSCode 使用</font></font></h1><a id="user-content-vscode-usage" class="anchor-element" aria-label="永久链接：VSCode 使用" href="#vscode-usage"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您使用 vscode 开发此项目，这里有一些建议可以帮助您：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装 vscode C++ 扩展：
+</font></font><ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">C/C++</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">C/C++ 扩展包</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">C/C++ 主题</font></font></li>
+</ul>
+</li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">安装 vscode cmake 扩展：
+</font></font><ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">编译器</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Cmake工具</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">CMake 测试浏览器</font></font></li>
+</ul>
+</li>
+</ul>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">这应该可以帮助您在 vscode 中启用测试和调试测试。</font></font></p>
+<div class="markdown-heading" dir="auto"><h1 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">当您无法使用 cmake 时的更多构建说明</font></font></h1><a id="user-content-more-building-instructions-for-when-you-cant-use-cmake" class="anchor-element" aria-label="永久链接：当您无法使用 cmake 时的更多构建说明" href="#more-building-instructions-for-when-you-cant-use-cmake"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">iOS系统</font></font></h2><a id="user-content-ios" class="anchor-element" aria-label="永久链接：iOS" href="#ios"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">我写了一篇关于如何为 iPhone 和 iPad 环境编译和使用该库的文章。</font></font><a href="http://pdfhummus.com/post/45501609236/how-to-build-iphone-apps-that-use-pdfhummus" rel="nofollow"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">你可以在这里</font></font></a><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">阅读它</font><font style="vertical-align: inherit;">。</font></font></p>
+<div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">为其他场景构建说明</font></font></h2><a id="user-content-build-insturctions-for-other-scenraios" class="anchor-element" aria-label="永久链接：为其他场景构建说明" href="#build-insturctions-for-other-scenraios"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+<p dir="auto"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">如果您需要的话，在各种构建环境（例如 VS 和 Xcode）中构建项目文件应该非常简单。</font><font style="vertical-align: inherit;">以下是一些提示：</font></font></p>
+<ul dir="auto">
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">所有 PDFWriter 源都位于 PDFWriter 文件夹中（您可以通过下载 git 项目或从下载部分获取它）。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库依赖于 Zlib、LibTiff、LibJpeg、LibPng 和 FreeType 的 dll/共享库。</font><font style="vertical-align: inherit;">链接时 - 确保它们可用。</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">该库应该很好地支持 32 位和 64 位环境。</font><font style="vertical-align: inherit;">它使用标准 C++ 库。</font></font></li>
+</ul>
+</article></div>
